@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
+import PushNotificationExample from './PushNotificationExample';
 
 export default function EditScreenInfo({ path }: { path: string }) {
   return (
@@ -38,6 +39,8 @@ export default function EditScreenInfo({ path }: { path: string }) {
           </Text>
         </TouchableOpacity>
       </View>
+
+      <PushNotificationExample />
     </View>
   );
 }
