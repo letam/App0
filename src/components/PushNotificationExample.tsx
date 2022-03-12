@@ -24,7 +24,7 @@ export default function PushNotificationExample() {
 }
 
 // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.dev/notifications
-async function sendPushNotification(expoPushToken) {
+async function sendPushNotification(expoPushToken: string) {
   const message = {
     to: expoPushToken,
     sound: 'default',

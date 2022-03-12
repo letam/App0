@@ -1,3 +1,5 @@
+import { Subscription } from 'expo-modules-core';
+import { Notification } from 'expo-notifications';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import { Platform } from 'react-native';
@@ -14,12 +16,12 @@ Notifications.setNotificationHandler({
 
 interface INotificationsContext {
   expoPushToken: string;
-  notification: any;
+  notification: Notification | undefined;
 }
 
 const NotificationsContext = createContext({
   expoPushToken: '',
-  notification: null,
+  notification: undefined,
 } as INotificationsContext);
 
 export function useNotifications(): INotificationsContext {
@@ -28,12 +30,12 @@ export function useNotifications(): INotificationsContext {
 
 const useNotificationsContextManager = () => {
   const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(null);
-  const notificationListener = useRef();
-  const responseListener = useRef();
+  const [notification, setNotification] = useState<Notification>();
+  const notificationListener = useRef<Subscription>();
+  const responseListener = useRef<Subscription>();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
+    registerForPushNotificationsAsync().then((token) => token && setExpoPushToken(token));
 
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
@@ -46,8 +48,10 @@ const useNotificationsContextManager = () => {
     });
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(notificationListener.current);
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
 
