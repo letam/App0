@@ -35,7 +35,7 @@ const useNotificationsContextManager = () => {
   const responseListener = useRef<Subscription>();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => token && setExpoPushToken(token));
+    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token as string));
 
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
@@ -48,10 +48,8 @@ const useNotificationsContextManager = () => {
     });
 
     return () => {
-      notificationListener.current &&
-        Notifications.removeNotificationSubscription(notificationListener.current);
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
+      Notifications.removeNotificationSubscription(notificationListener.current as Subscription);
+      Notifications.removeNotificationSubscription(responseListener.current as Subscription);
     };
   }, []);
 
