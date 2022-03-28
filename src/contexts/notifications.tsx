@@ -80,7 +80,7 @@ async function registerForPushNotificationsAsync() {
     token = (await Notifications.getExpoPushTokenAsync()).data;
     console.log(token);
   } else {
-    alert('Must use physical device for Push Notifications');
+    console.warn('Must use physical device for Push Notifications');
   }
 
   if (Platform.OS === 'android') {
