@@ -1,4 +1,5 @@
 import { Button } from 'react-native';
+import * as Device from 'expo-device';
 
 import { useNotifications } from '../contexts/notifications';
 import { Text, View } from './Themed';
@@ -6,7 +7,15 @@ import { Text, View } from './Themed';
 export default function PushNotificationExample() {
   const { expoPushToken, notification } = useNotifications();
   return (
-    <View>
+    <View style={{ alignItems: 'center' }}>
+      <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>
+        Push Notification Example
+      </Text>
+      {!Device.isDevice && (
+        <Text style={{ color: 'lightcoral', marginBottom: 4 }}>
+          NOTE: Must use physical device for Push Notifications
+        </Text>
+      )}
       <Text>Your expo push token: {expoPushToken}</Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>Title: {notification && notification.request.content.title} </Text>
